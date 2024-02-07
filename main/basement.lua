@@ -127,6 +127,7 @@ Waffles.Sequence(ACTIONS.JUMPIN, "strfn", ACTIONS_JUMPIN_strfn)
 --------------------------------------------------------------------------
 TUNING.BASEMENT =
 {
+    LIMIT = GetModConfigData("basement_limit"),
 	CEILING_HEIGHT = 6,
 	SANITYAURA = 10,
 	INSULATION = -25,

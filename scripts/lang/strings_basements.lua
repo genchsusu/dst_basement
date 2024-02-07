@@ -42,6 +42,7 @@ return
 		{
 			ANNOUNCE_INVALID_POSITION = "ERROR! No space left to generate new basement.",
 			ANNOUNCE_LOST_ENTITIES = "These entities have been lost under basement rubble:\n%s",
+            BASEMENT_LIMIT_ANNOUNCEMENT = "The basement limit has been reached.",
 		},
 	},
 	

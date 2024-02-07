@@ -42,6 +42,7 @@ return
 		{
 			ANNOUNCE_INVALID_POSITION = "Nie udało się znaleźć prawidłowej pozycji dla piwnicy.",
 			ANNOUNCE_LOST_ENTITIES = "Po usunięciu piwnicy, te jednostki zostały zgubione pod gruzami:\n%s",
+            BASEMENT_LIMIT_ANNOUNCEMENT = "Osiągnięto limit piwnic.",
 		},
 	},
 	

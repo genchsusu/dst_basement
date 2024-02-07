@@ -42,6 +42,7 @@ return
 		{
 			ANNOUNCE_INVALID_POSITION = "ОШИБКА! Не удалось найти пространства для генерации подвала.",
 			ANNOUNCE_LOST_ENTITIES = "Данные объекты были похоронены под обломками подвала:\n%s",
+            BASEMENT_LIMIT_ANNOUNCEMENT = "Достигнут предел количества подвалов.",
 		},
 	},
 	

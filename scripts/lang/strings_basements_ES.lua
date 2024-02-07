@@ -42,6 +42,7 @@ return
         {
             ANNOUNCE_INVALID_POSITION = "Error al encontrar una posición válida para el sótano.",
             ANNOUNCE_LOST_ENTITIES = "Tras la eliminación del sótano, estas entidades se han perdido bajo los escombros:\n%s",
+            BASEMENT_LIMIT_ANNOUNCEMENT = "Se ha alcanzado el límite de sótanos.",
         },
     },
    

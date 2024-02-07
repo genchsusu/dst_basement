@@ -42,6 +42,7 @@ return
 		{
 			ANNOUNCE_INVALID_POSITION = "错误！没有空间生成新的地下室。",
 			ANNOUNCE_LOST_ENTITIES = "这些实体在地下室的废墟下丢失了：\n%s",
+            BASEMENT_LIMIT_ANNOUNCEMENT = "地下室数量已达上限。",
 		},
 	},
 	

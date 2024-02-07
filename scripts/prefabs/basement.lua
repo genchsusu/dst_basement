@@ -468,6 +468,7 @@ local function entrance()
 	inst.MiniMapEntity:SetIcon("basement.tex")
 	
 	inst:AddTag("basement_part")
+    inst:AddTag("basement_entrance")
 	inst:AddTag("antlion_sinkhole_blocker")
 	
 	inst:SetDeployExtraSpacing(2.5)
@@ -724,6 +725,15 @@ local function FindValidInteriorPosition()
 end
 
 local function BuildBasement(builder)
+    local basement_limit = TUNING.BASEMENT.LIMIT
+    if basement_limit then
+        local existingEntrances = TheSim:FindEntities(0, 0, 0, 10000, {"basement_entrance"})
+        if #existingEntrances > (basement_limit - 1) then
+            TheNet:Announce(STRINGS.HUD.BASEMENT.BASEMENT_LIMIT_ANNOUNCEMENT)
+            return
+        end
+    end
+
 	local x, y, z = builder.Transform:GetWorldPosition()
 	local owner = Waffles.Browse(TheSim:FindEntities(x, y, z, 69, { "player" }), 1, "userid")
 	

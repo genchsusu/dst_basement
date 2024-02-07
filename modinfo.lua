@@ -4,7 +4,7 @@ end
 
 name = e_or_z("Basements", "地下室")
 author = "OpenSource"
-version = "1.0.0"
+version = "1.0.1"
 
 description =e_or_z(
     [[
@@ -87,6 +87,20 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 		default = [[return {Ingredient("goldnugget", 5), Ingredient("cutstone", 10), Ingredient("gunpowder", 5)}]],
 	},
 
+    {	
+		name = "basement_limit",
+		label = e_or_z("Basement Limit", "地下室数量限制"),
+		hover = e_or_z("Set the maximum number of basements allowed", "设置允许的地下室最大数量"),
+		options =
+		{
+            { description = e_or_z("Unlimited", "不限制"), data = false },
+            { description = e_or_z("1 Basement", "限1个"), data = 1 },
+            { description = e_or_z("3 Basements", "限3个"), data = 3 },
+            { description = e_or_z("5 Basements", "限5个"), data = 5 },
+		},
+		default = false,
+	},
+
     header(e_or_z("Plants", "种植类")),
 
     AddConfig(e_or_z("All Seasons Farm Plant", "全季节种植"), "enable_all_seasons_growth", e_or_z("Enable all seasons growth and quick grow for farm plants.", "启用农场植物的全季节生长。"), nil, true),
@@ -100,9 +114,9 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 		hover = e_or_z("Get a [number] x [number] grid if using farm_plow in basement", "在地下室使用耕地机将获得一个 [number] x [number] 的矩阵"),
 		options =
 		{
-			{ description = "3x3", data = 3, hover = "" },
-			{ description = "4x4", data = 4, hover = "" },
-			{ description = "5x5", data = 5, hover = "" },
+			{ description = "3x3", data = 3 },
+			{ description = "4x4", data = 4 },
+			{ description = "5x5", data = 5 },
 		},
 		default = 3,
 	},

@@ -42,6 +42,7 @@ return
 		{
 			ANNOUNCE_INVALID_POSITION = "Não foi possível encontrar uma posição válida para o abrigo subterrâneo.",
 			ANNOUNCE_LOST_ENTITIES = "Ao remover o abrigo subterrâneo, essas entidades serão perdidos embaixo dos escombros:\n%s",
+            BASEMENT_LIMIT_ANNOUNCEMENT = "O limite de porões foi atingido.",
 		},
 	},
 	
