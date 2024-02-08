@@ -4,7 +4,7 @@ end
 
 name = e_or_z("Basements", "地下室")
 author = "OpenSource"
-version = "1.0.1"
+version = "1.0.2"
 
 description =e_or_z(
     [[
@@ -100,6 +100,8 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 		},
 		default = false,
 	},
+
+    AddConfig(e_or_z("Prohibition of food spoilage in the basement", "禁止地下室食物腐烂"), "basement_no_perish", e_or_z("Prohibition of food spoilage in the basement", "禁止地下室食物腐烂"), nil, true),
 
     header(e_or_z("Plants", "种植类")),
 

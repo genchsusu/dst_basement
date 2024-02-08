@@ -22,6 +22,7 @@ return
 		BASEMENT_UPGRADE_STAIRS_3 = "无拱门石制楼梯",
 		BASEMENT_UPGRADE_STAIRS_4 = "宽版无拱门石制楼梯",
 		BASEMENT_UPGRADE_GUNPOWDER = "催化火药",
+        BASEMENT_LAKE = "人造湖",
 	},
 	
 	RECIPE_DESC =
@@ -34,6 +35,7 @@ return
 		BASEMENT_UPGRADE_STAIRS_3 = "没有拱门。",
 		BASEMENT_UPGRADE_STAIRS_4 = "宽版且没有拱门。",
 		BASEMENT_UPGRADE_GUNPOWDER = "点燃火药摧毁地下室。",
+        BASEMENT_LAKE = "地下室人造湖",
 	},
 	
 	HUD =

@@ -6,10 +6,12 @@ table.insert(PrefabFiles, "basement_upgrades")
 table.insert(PrefabFiles, "basement_explosion")
 table.insert(PrefabFiles, "fakedynamicshadow")
 table.insert(PrefabFiles, "sparkle_fx")
+table.insert(PrefabFiles, "basement_lake")
 if TheNet:GetIsServer() then
 	table.insert(PrefabFiles, "basement_debug")
 end
 -- Assets
+table.insert(Assets, Asset("ATLAS", "images/inventoryimages/lake.xml"))
 table.insert(Assets, Asset("ATLAS", "images/inventoryimages/basement.xml"))
 -- MiniMap icon
 AddMinimapAtlas("images/inventoryimages/basement.xml")

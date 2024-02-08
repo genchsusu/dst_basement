@@ -22,6 +22,7 @@ return
 		BASEMENT_UPGRADE_STAIRS_3 = "W pełni kamienne schody",
 		BASEMENT_UPGRADE_STAIRS_4 = "Szerokie w pełni kamiennie schody",
 		BASEMENT_UPGRADE_GUNPOWDER = "Katalizowany proch strzelniczy",
+        BASEMENT_LAKE = "Sztuczne Jezioro",
 	},
 	
 	RECIPE_DESC =
@@ -34,6 +35,7 @@ return
 		BASEMENT_UPGRADE_STAIRS_3 = "Bez łuku.",
 		BASEMENT_UPGRADE_STAIRS_4 = "Szerokie i bez łuku.",
 		BASEMENT_UPGRADE_GUNPOWDER = "Rodzaj pożegnalnych fajerwerek.",
+        BASEMENT_LAKE = "Sztuczne Jezioro w Piwnicy",
 	},
 	
 	HUD =

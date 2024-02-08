@@ -206,6 +206,21 @@ local BASEMENT_Recipes = {
             image = "gunpowder.tex",
         },
         filters = {"BASEMENT"},
+    },
+    {
+        name = "basement_lake",
+        ingredients = {
+            Ingredient("goldenshovel", 1), 
+        },
+        level = TECH.BASEMENT_TECH_ONE,
+        config = {
+            placer = "basement_lake_placer",
+            min_spacing = 3.7,
+            tag = "basement_lake",
+            atlas = "images/inventoryimages/lake.xml",
+            image = "lake.tex",
+        },
+        filters = {"BASEMENT"},
     }
 }
 

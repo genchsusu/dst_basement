@@ -1611,9 +1611,12 @@ local function AddBasementObjectBenefits(inst, ent)
 		ent:AddTag("fridge")
 		ent:AddTag("nocool")
 	end
-    if ent.components.perishable ~= nil then
-        ent.components.perishable:SetPerishTime(1200000)
-        ent.components.perishable:StopPerishing()
+
+    if TUNING.BASEMENT.PERISH then
+        if ent.components.perishable ~= nil then
+            ent.components.perishable:SetPerishTime(1200000)
+            ent.components.perishable:StopPerishing()
+        end
     end
 	if ent.components.sleepingbag ~= nil and ent:HasTag("tent") then
 		data.tent = ent:HasTag("siestahut")

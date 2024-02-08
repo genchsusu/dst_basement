@@ -22,6 +22,7 @@ return
         BASEMENT_UPGRADE_STAIRS_3 = "Escaleras de piedra completa",
         BASEMENT_UPGRADE_STAIRS_4 = "Amplia escalera de piedra completa",
         BASEMENT_UPGRADE_GUNPOWDER = "Pólvora catalizada",
+        BASEMENT_LAKE = "Lago Artificial",
     },
    
     RECIPE_DESC =
@@ -34,6 +35,7 @@ return
         BASEMENT_UPGRADE_STAIRS_3 = "Sin un arco.",
         BASEMENT_UPGRADE_STAIRS_4 = "Ancho y sin arco.",
         BASEMENT_UPGRADE_GUNPOWDER = "Una especie de fuegos artificiales de despedida.",
+        BASEMENT_LAKE = "Lago Artificial en el Sótano",
     },
    
     HUD =

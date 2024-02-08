@@ -22,6 +22,7 @@ return
 		BASEMENT_UPGRADE_STAIRS_3 = "Full Stone Stairs",
 		BASEMENT_UPGRADE_STAIRS_4 = "Wide Full Stone Stairs",
 		BASEMENT_UPGRADE_GUNPOWDER = "Catalyzed Gunpowder",
+        BASEMENT_LAKE = "Artificial Lake",
 	},
 	
 	RECIPE_DESC =
@@ -34,6 +35,7 @@ return
 		BASEMENT_UPGRADE_STAIRS_3 = "Without an arch.",
 		BASEMENT_UPGRADE_STAIRS_4 = "Wide and no arch.",
 		BASEMENT_UPGRADE_GUNPOWDER = "A kind of farewell firework.",
+        BASEMENT_LAKE = "Basement Artificial Lake",
 	},
 	
 	HUD =

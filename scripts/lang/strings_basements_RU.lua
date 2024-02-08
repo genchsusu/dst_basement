@@ -22,6 +22,7 @@ return
 		BASEMENT_UPGRADE_STAIRS_3 = "Полная каменная лестница",
 		BASEMENT_UPGRADE_STAIRS_4 = "Широкая полная каменная лестница",
 		BASEMENT_UPGRADE_GUNPOWDER = "Катализированный порох",
+        BASEMENT_LAKE = "Искусственное озеро",
 	},
 	
 	RECIPE_DESC =
@@ -34,6 +35,7 @@ return
 		BASEMENT_UPGRADE_STAIRS_3 = "Без арки.",
 		BASEMENT_UPGRADE_STAIRS_4 = "Шире и без арки.",
 		BASEMENT_UPGRADE_GUNPOWDER = "Своего рода прощальный фейерверк.",
+        BASEMENT_LAKE = "Искусственное озеро в подвале",
 	},
 	
 	HUD =
