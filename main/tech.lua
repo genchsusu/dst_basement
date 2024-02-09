@@ -79,13 +79,20 @@ local function walltestfn(pt, rot)
         end
     end
     local pttile = Waffles.GetInteriorTileKey(pt.x, 0, pt.z)
-    for i, v in ipairs(TheSim:FindEntities(tx, 0, tz, 3, nil,
-        {"NOBLOCK", "FX", "INLIMBO", "DECOR", "player", "basement_part"})) do
+    for _, v in ipairs(TheSim:FindEntities(tx, 0, tz, 3, nil, {"NOBLOCK", "FX", "INLIMBO", "DECOR", "player", "basement_part"})) do
         if Waffles.GetInteriorTileKey(v.Transform:GetWorldPosition()) == pttile then
             return false
         end
     end
     return true
+end
+
+-- To ensure the thing is in basement
+local function isInBasementTestFn(pt, rot)
+    if TheWorld.Map:IsBasementAtPoint(pt:Get()) then
+        return true
+    end
+    return false
 end
 
 local BASEMENT_Recipes = {
@@ -129,7 +136,7 @@ local BASEMENT_Recipes = {
             min_spacing = 0,
             atlas = "images/inventoryimages.xml",
             image = "wall_stone_item.tex",
-            testfn = walltestfn
+            testfn = walltestfn,
         },
         filters = {"BASEMENT"},
     },
@@ -144,6 +151,7 @@ local BASEMENT_Recipes = {
             tag = "basement_upgradeuser",
             atlas = "images/inventoryimages.xml",
             image = "turf_rocky.tex",
+            nounlock = true,
         },
         filters = {"BASEMENT"},
     },
@@ -158,6 +166,7 @@ local BASEMENT_Recipes = {
             tag = "basement_upgradeuser",
             atlas = "images/inventoryimages.xml",
             image = "turf_rocky.tex",
+            nounlock = true,
         },
         filters = {"BASEMENT"},
     },
@@ -172,6 +181,7 @@ local BASEMENT_Recipes = {
             tag = "basement_upgradeuser",
             atlas = "images/inventoryimages.xml",
             image = "turf_woodfloor.tex",
+            nounlock = true,
         },
         filters = {"BASEMENT"},
         descoverride = "turf_woodfloor",
@@ -187,6 +197,7 @@ local BASEMENT_Recipes = {
             tag = "basement_upgradeuser",
             atlas = "images/inventoryimages.xml",
             image = "turf_checkerfloor.tex",
+            nounlock = true,
         },
         filters = {"BASEMENT"},
         descoverride = "turf_checkerfloor",
@@ -204,6 +215,7 @@ local BASEMENT_Recipes = {
             tag = "basement_upgradeuser_owner",
             atlas = "images/inventoryimages.xml",
             image = "gunpowder.tex",
+            testfn = isInBasementTestFn,
         },
         filters = {"BASEMENT"},
     },
@@ -219,6 +231,7 @@ local BASEMENT_Recipes = {
             tag = "basement_lake",
             atlas = "images/inventoryimages/lake.xml",
             image = "lake.tex",
+            testfn = isInBasementTestFn,
         },
         filters = {"BASEMENT"},
     }
