@@ -24,3 +24,11 @@ modimport("main/tech")
 modimport("main/modules/farm_plant")
 modimport("main/modules/no_hound")
 modimport("main/modules/no_witherable")
+
+-- Compatibility
+-- For uncompromising
+local uncompromising = "workshop-2039181790"
+if Waffles.IsModLoaded(uncompromising) then
+    print("Basements: Uncompromising detected, applying compatibility")
+    modimport("main/modules/uncompromising")
+end

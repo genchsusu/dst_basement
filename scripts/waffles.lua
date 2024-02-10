@@ -46,6 +46,15 @@ local function getupvalue(fn, ...)
 	return fn, i, prevfn
 end
 
+local function IsModLoaded(name)
+    for _, modname in ipairs(ModManager.enabledmods) do
+        if modname == name then
+            return true
+        end
+    end
+    return false
+end
+
 require "entityscript"
 
 local function cutpath(path_string)
@@ -66,6 +75,7 @@ Waffles =
 	Load = function(...) return MEMORY[getmemkey(...)] end,
 	Save = function(value, ...) MEMORY[getmemkey(...)] = value end,
     FindUpvalue = findupvalue,
+    IsModLoaded = IsModLoaded,
 	GetUpvalue = getupvalue,
 	Dummy = function() end,		
 	Valid = function(inst) return type(inst) == "table" and inst:IsValid() end,
