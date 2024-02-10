@@ -1,8 +1,11 @@
 -- Remove hound from basement
-local dog = {"hound", "firehound", "icehound", "mutatedhound", "moonhound", "houndcorpse", "clayhound", "warg",
+local items = {"hound", "firehound", "icehound", "mutatedhound", "moonhound", "houndcorpse", "clayhound", "warg",
              "claywarg", "gingerbreadwarg"}
 
-for _, v in ipairs(dog) do --
+table.insert(items, "snowpile") -- In order to be compatible with uncompromising
+table.insert(items, "snowmong") -- In order to be compatible with uncompromising
+
+for _, v in ipairs(items) do --
     AddPrefabPostInit(v, function(inst)
         if TheWorld.ismastersim then
             inst:DoPeriodicTask(1, function(inst)

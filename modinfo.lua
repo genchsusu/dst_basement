@@ -4,7 +4,7 @@ end
 
 name = e_or_z("Basements", "地下室")
 author = "OpenSource"
-version = "1.0.3"
+version = "1.0.4"
 
 description =e_or_z(
     [[
@@ -25,7 +25,7 @@ standalone = false
 restart_required = false
 dst_compatible = true
 api_version_dst = 10
---priority = 1
+priority = -99
 all_clients_require_mod = true
 client_only_mod = false
 
