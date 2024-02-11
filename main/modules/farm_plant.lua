@@ -94,9 +94,11 @@ local function DoModification(prefab)
 
         -- Remove stress
         if always_oversized then
-            inst.components.farmplantstress.stressors = {}
-            inst.components.farmplantstress.stressors_testfns = {}
-            inst.components.farmplantstress.stressor_fns = {}
+            if inst.components.farmplantstress ~= nil then
+                inst.components.farmplantstress.stressors = {}
+                inst.components.farmplantstress.stressors_testfns = {}
+                inst.components.farmplantstress.stressor_fns = {}
+            end
         end
     end)
 end
@@ -105,8 +107,10 @@ for _, v in pairs(PlantDefs) do
     if v.prefab then
         if enable_all_seasons_growth then
             SetAllSeasonsGrowth(v)
-        end 
-        DoModification(v.prefab)
+        end
+        if not v.is_randomseed then
+            DoModification(v.prefab)
+        end
     end
 end
 
