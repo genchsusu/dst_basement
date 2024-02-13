@@ -216,10 +216,13 @@ local function wall()
 	inst.entity:AddTransform()
 	inst.entity:AddAnimState()
 	inst.entity:AddNetwork()
+    inst.entity:AddLight()
 	
 	inst.Transform:SetEightFaced()
 	
 	inst:AddTag("blocker")
+    inst:AddTag("NOBLOCK")
+
 	local phys = inst.entity:AddPhysics()
 	phys:SetMass(0)
 	phys:SetCollisionGroup(COLLISION.WORLD)
@@ -228,10 +231,10 @@ local function wall()
 	phys:CollidesWith(COLLISION.CHARACTERS)
 	phys:CollidesWith(COLLISION.GIANTS)
 	phys:CollidesWith(COLLISION.FLYERS)
-    -- Gin
     phys:CollidesWith(COLLISION.OBSTACLES)
     phys:CollidesWith(COLLISION.SMALLOBSTACLES)
 	phys:SetCapsule(0.5, 50)
+    inst.Physics:SetDontRemoveOnSleep(true)
 	
 	inst.AnimState:SetBank("wall")
 	inst.AnimState:SetBuild("wall_stone")
@@ -243,19 +246,7 @@ local function wall()
 	inst:AddTag("antlion_sinkhole_blocker")
 	
 	inst:SetPrefabNameOverride("wall_stone")
-	
-	if not TheNet:IsDedicated() then
-		inst:ListenForEvent("mouseover", OnMouseOverWall)
-	end
-	
-	inst.entity:SetPristine()
-	
-	if not TheWorld.ismastersim then
-		return inst
-	end
 
-    -- Gin
-    inst.entity:AddLight()
     inst.Light:Enable(true)
     inst.Light:SetRadius(50)
     inst.Light:SetFalloff(0.5)
@@ -268,6 +259,16 @@ local function wall()
 	inst.components.workable:SetWorkLeft(TUNING.CAVEIN_BOULDER_MINE * 1.5)
 	inst.components.workable:SetOnWorkCallback(OnWorkedWall)
 	
+	if not TheNet:IsDedicated() then
+		inst:ListenForEvent("mouseover", OnMouseOverWall)
+	end
+	
+	inst.entity:SetPristine()
+	
+	if not TheWorld.ismastersim then
+		return inst
+	end
+
 	inst.persists = false
 			
 	return inst
@@ -454,7 +455,14 @@ local function entrance()
 	inst.entity:AddMiniMapEntity()
 	inst.entity:AddSoundEmitter()
 	inst.entity:AddNetwork()
-	
+    inst.entity:AddLight()
+    
+    inst.Light:Enable(true)
+    inst.Light:SetRadius(2)
+    inst.Light:SetFalloff(0.5)
+    inst.Light:SetIntensity(0.8)
+    inst.Light:SetColour(223/255, 208/255, 69/255)
+
 	inst.Transform:SetTwoFaced()
 	
 	MakeObstaclePhysics(inst, 0.65)
@@ -513,14 +521,6 @@ local function entrance()
 	inst.components.trader.onaccept = OnAccept
 	inst.components.trader.deleteitemonaccept = false
 	
-    -- Gin
-    inst.entity:AddLight()
-    inst.Light:Enable(true)
-    inst.Light:SetRadius(2)
-    inst.Light:SetFalloff(0.5)
-    inst.Light:SetIntensity(0.8)
-    inst.Light:SetColour(223/255, 208/255, 69/255)
-
 	inst:ListenForEvent("starttravelsound", PlayTravelSound)
 			
 	inst.OnEntityWake = Shine
