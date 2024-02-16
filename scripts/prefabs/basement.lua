@@ -49,14 +49,6 @@ local BLOCKED =
 	},
 }
 
-local TEMPERATURE_MULT =
-{
-	autumn = 0.5,
-    winter = -2,
-	spring = 0.5,
-	summer = 2,
-}
-
 local COLOURCUBE_PHASEFN =
 {
 	blendtime = 1,
@@ -1445,8 +1437,8 @@ local function OnEntitySleepClient(inst)
 	EnableBasementEnvironment(inst, false)
 end
 
-local function OnNewSeason(inst, season)
-	inst.insulation = TUNING.BASEMENT.INSULATION * (TEMPERATURE_MULT[season] or 1)
+local function OnTemperatureChanged(inst, temperature)
+	inst.insulation = 35 - temperature
 	
 	if inst.allplayers ~= nil then
 		for ent in pairs(inst.allplayers) do
@@ -2024,9 +2016,9 @@ local function OnEntityWake(inst)
 	inst:ListenForEvent("screenflash", inst.OnScreenFlash, TheWorld)
 	
 	inst:WatchWorldState("iswet", OnWet)
-	inst:WatchWorldState("season", OnNewSeason)
-	OnNewSeason(inst, TheWorld.state.season)
-	
+    inst:WatchWorldState("temperature", OnTemperatureChanged)
+    OnTemperatureChanged(inst, TheWorld.state.temperature)
+
 	RebuildWalls(inst)
 	
 	inst.ceiling = inst:SpawnChild("basement_ceiling")

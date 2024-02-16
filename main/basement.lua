@@ -131,7 +131,6 @@ TUNING.BASEMENT =
     PERISH = GetModConfigData("basement_no_perish"),
 	CEILING_HEIGHT = 6,
 	SANITYAURA = 10,
-	INSULATION = -25,
 	REMAINS_LOOT_PERCENT = 1,
 	SHADE = 0.5,
 }
