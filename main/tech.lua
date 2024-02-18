@@ -218,24 +218,29 @@ local BASEMENT_Recipes = {
             testfn = isInBasementTestFn,
         },
         filters = {"BASEMENT"},
-    },
-    {
-        name = "basement_lake",
-        ingredients = {
-            Ingredient("goldenshovel", 1), 
-        },
-        level = TECH.BASEMENT_TECH_ONE,
-        config = {
-            placer = "basement_lake_placer",
-            min_spacing = 3.7,
-            tag = "basement_lake",
-            atlas = "images/inventoryimages/lake.xml",
-            image = "lake.tex",
-            testfn = isInBasementTestFn,
-        },
-        filters = {"BASEMENT"},
     }
 }
+
+if GetModConfigData("enable_basement_lake") then
+	table.insert(BASEMENT_Recipes, 
+        {
+            name = "basement_lake",
+            ingredients = {
+                Ingredient("goldenshovel", 1), 
+            },
+            level = TECH.BASEMENT_TECH_ONE,
+            config = {
+                placer = "basement_lake_placer",
+                min_spacing = 3.7,
+                tag = "basement_lake",
+                atlas = "images/inventoryimages/lake.xml",
+                image = "lake.tex",
+                testfn = isInBasementTestFn,
+            },
+            filters = {"BASEMENT"},
+        }
+    )
+end
 
 for _, data in pairs(BASEMENT_Recipes) do
     AddRecipe2(data.name, data.ingredients, data.level, data.config, data.filters)

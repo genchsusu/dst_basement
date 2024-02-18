@@ -4,7 +4,7 @@ end
 
 name = e_or_z("Basements", "地下室")
 author = "OpenSource"
-version = "1.0.9"
+version = "1.0.10"
 
 description =e_or_z(
     [[
@@ -89,7 +89,7 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 
     {	
 		name = "basement_limit",
-		label = e_or_z("Basement Limit", "地下室数量限制"),
+		label = e_or_z("Basement Limit", "数量限制"),
 		hover = e_or_z("Set the maximum number of basements allowed", "设置允许的地下室最大数量"),
 		options =
 		{
@@ -101,7 +101,9 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 		default = false,
 	},
 
-    AddConfig(e_or_z("Prohibition of food spoilage in the basement", "禁止地下室食物腐烂"), "basement_no_perish", e_or_z("Prohibition of food spoilage in the basement", "禁止地下室食物腐烂"), nil, true),
+    AddConfig(e_or_z("Food spoilage", "食物腐烂"), "basement_no_perish", e_or_z("Prohibition of food spoilage in the basement", "禁止在地下室中食物腐烂"), nil, true),
+
+    AddConfig(e_or_z("basement lake", "人造湖"), "enable_basement_lake", e_or_z("Enable basement lake", "是否启用地下室人造湖"), nil, true),
 
     header(e_or_z("Plants", "种植类")),
 
