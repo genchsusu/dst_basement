@@ -95,9 +95,14 @@ local function DoModification(prefab)
         -- Remove stress
         if always_oversized then
             if inst.components.farmplantstress ~= nil then
-                inst.components.farmplantstress.stressors = {}
-                inst.components.farmplantstress.stressors_testfns = {}
-                inst.components.farmplantstress.stressor_fns = {}
+                -- inst.components.farmplantstress.stressors = {}
+                -- inst.components.farmplantstress.stressors_testfns = {}
+                -- inst.components.farmplantstress.stressor_fns = {}
+                inst:DoPeriodicTask(1, function(inst)
+                    if inst:IsInBasement() then
+                        inst.components.farmplantstress:Reset()
+                    end
+                end)
             end
         end
     end)

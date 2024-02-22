@@ -557,11 +557,12 @@ AddComponentPostInit("farming_manager", function(self, inst)
 end)
 
 -- Enable farm_plow_item to be deployed in basement
+local farm_soil_grid = GetModConfigData('farm_soil_grid')
 local function item_ondeploy(inst, pt, deployer)
     local cx, cy, cz = TheWorld.Map:GetTileCenterPoint(pt:Get())
     
     -- Deploy the num x num grid of farm soil
-    local gridSize = GetModConfigData('farm_soil_grid') or 3
+    local gridSize = farm_soil_grid or 3
     local offset = (gridSize - 1) * 1.25 / 2
 
     for dx = -offset, offset, 1.25 do
@@ -589,8 +590,11 @@ AddPrefabPostInit("farm_plow_item", function(inst)
     if old_custom then
         inst._custom_candeploy_fn = function(...)
             if inst:IsInBasement() then
-                -- return false
-                return true
+                if farm_soil_grid then
+                    return true
+                else
+                    return false
+                end
             else
                 return old_custom(...)
             end
