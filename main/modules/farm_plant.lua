@@ -18,61 +18,71 @@ end
 
 local function DoModification(prefab)
     AddPrefabPostInit(prefab, function(inst)
-        -- QuickGrow and replant
-        if inst.components.growable and inst.components.growable.stages then
-            local stages = deepcopy(inst.components.growable.stages)
-
-            if enable_quick_grow then
-                for _, v in pairs(stages) do
-                    if v.name and State[v.name] then
-                        v.time = function(inst) return 0 end
+        inst:DoPeriodicTask(1, function(inst)
+            if inst:IsInBasement() then
+                -- Remove stress
+                if always_oversized then
+                    if inst.components.farmplantstress ~= nil then
+                        inst.components.farmplantstress:Reset()
                     end
                 end
-            end 
+                -- QuickGrow and replant
+                if inst.components.growable and inst.components.growable.stages then
+                    local stages = deepcopy(inst.components.growable.stages)
 
-            -- Replant
-            if enable_replant then
-                local MakePickableFunc, _ = Waffles.FindUpvalue(stages[1].fn, "MakePickable")
-                local _, index = Waffles.FindUpvalue(MakePickableFunc, "OnPicked")
-                if index then
-                    local function OnPicked(inst, doer)
-                        local x, y, z = inst.Transform:GetWorldPosition()
-                        if TheWorld.Map:GetTileAtPoint(x, y, z) == WORLD_TILES.FARMING_SOIL then
-                            local soil = SpawnPrefab("farm_soil")
-                            soil.Transform:SetPosition(x, y, z)
-                            soil:PushEvent("breaksoil")
+                    if enable_quick_grow then
+                        for _, v in pairs(stages) do
+                            if v.name and State[v.name] then
+                                v.time = function(inst) return 0 end
+                            end
                         end
-                    
-                        local plant_name = "farm_plant_" .. inst.plant_def.product
-                        local new_plant = SpawnPrefab(plant_name)
-                        if new_plant ~= nil then
-                            new_plant.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                    end 
+
+                    -- Replant
+                    if enable_replant then
+                        local MakePickableFunc, _ = Waffles.FindUpvalue(stages[1].fn, "MakePickable")
+                        local _, index = Waffles.FindUpvalue(MakePickableFunc, "OnPicked")
+                        if index then
+                            local function OnPicked(inst, doer)
+                                local x, y, z = inst.Transform:GetWorldPosition()
+                                if TheWorld.Map:GetTileAtPoint(x, y, z) == WORLD_TILES.FARMING_SOIL then
+                                    local soil = SpawnPrefab("farm_soil")
+                                    soil.Transform:SetPosition(x, y, z)
+                                    soil:PushEvent("breaksoil")
+                                end
+                            
+                                local plant_name = "farm_plant_" .. inst.plant_def.product
+                                local new_plant = SpawnPrefab(plant_name)
+                                if new_plant ~= nil then
+                                    new_plant.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                                end
+                            end
+                            debug.setupvalue(MakePickableFunc, index, OnPicked)
+                        end  
+                    end
+
+                    -- growth
+                    if enable_oversized_never_rotten then
+                        local old_grow_fn = stages[6].fn
+                        local PlayStageAnimFunc, _ = Waffles.FindUpvalue(stages[6].fn, "PlayStageAnim")
+                        stages[6].fn = function(...)
+                            old_grow_fn(...)
+                            inst:RemoveTag("farm_plant_killjoy")
+                            inst:RemoveTag("pickable_harvest_str")
+                            -- Replace rotten with full anim
+                            if PlayStageAnimFunc then
+                                PlayStageAnimFunc(inst, inst.is_oversized and "oversized" or "full")
+                            end
                         end
                     end
-                    debug.setupvalue(MakePickableFunc, index, OnPicked)
-                end  
-            end
 
-            -- growth
-            if enable_oversized_never_rotten then
-                local old_grow_fn = stages[6].fn
-                local PlayStageAnimFunc, _ = Waffles.FindUpvalue(stages[6].fn, "PlayStageAnim")
-                stages[6].fn = function(...)
-                    old_grow_fn(...)
-                    inst:RemoveTag("farm_plant_killjoy")
-                    inst:RemoveTag("pickable_harvest_str")
-                    -- Replace rotten with full anim
-                    if PlayStageAnimFunc then
-                        PlayStageAnimFunc(inst, inst.is_oversized and "oversized" or "full")
-                    end
+                    inst.components.growable.stages = stages
+                    inst.force_oversized = true
+                    inst.components.growable:StartGrowing()
+                    -- inst.components.growable:Pause()
                 end
             end
-
-            inst.components.growable.stages = stages
-            inst.force_oversized = true
-            inst.components.growable:StartGrowing()
-            inst.components.growable:Pause()
-        end
+        end)
 
         -- dig_up
         if inst.components.workable then
@@ -90,20 +100,6 @@ local function DoModification(prefab)
                 SpawnPrefab("farm_soil").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 old_onburnt(...)
             end)
-        end
-
-        -- Remove stress
-        if always_oversized then
-            if inst.components.farmplantstress ~= nil then
-                -- inst.components.farmplantstress.stressors = {}
-                -- inst.components.farmplantstress.stressors_testfns = {}
-                -- inst.components.farmplantstress.stressor_fns = {}
-                inst:DoPeriodicTask(1, function(inst)
-                    if inst:IsInBasement() then
-                        inst.components.farmplantstress:Reset()
-                    end
-                end)
-            end
         end
     end)
 end
