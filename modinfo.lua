@@ -4,7 +4,7 @@ end
 
 name = e_or_z("Basements", "地下室")
 author = "OpenSource"
-version = "1.0.12"
+version = "1.0.13"
 
 description =e_or_z(
     [[
@@ -109,9 +109,6 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 
     AddConfig(e_or_z("All Seasons Farm Plant", "全季节种植"), "enable_all_seasons_growth", e_or_z("Enable all seasons growth and quick grow for farm plants.", "启用农场植物的全季节生长。"), nil, true),
     AddConfig(e_or_z("Rapid growth", "快速生长"), "enable_quick_grow", e_or_z("Enable quick grow for farm plants.", "启用农场植物的快速生长。"), nil, true),
-    AddConfig(e_or_z("Replant at Original Position", "原位置重新种植"), "enable_replant", e_or_z("Replant at original position after picking.", "在采摘后在原有位置重新种植。"), nil, true),
-    AddConfig(e_or_z("Oversized Plant Never Rotten", "超重植物不腐烂"), "enable_oversized_never_rotten", e_or_z("Oversized plant never rotten.", "超重植物永远不会腐烂。"), nil, true),
-    AddConfig(e_or_z("Always Oversized Plant", "总是超重植物"), "always_oversized", e_or_z("Always oversized plant.", "总是超重植物。"), nil, true),
     {	
 		name = "farm_soil_grid",
 		label = e_or_z("farm_plow_item", "耕地机相关"),

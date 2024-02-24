@@ -129,6 +129,7 @@ TUNING.BASEMENT =
 {
     LIMIT = GetModConfigData("basement_limit"),
     PERISH = GetModConfigData("basement_no_perish"),
+    QUICK_GROW = GetModConfigData('enable_quick_grow'),
 	CEILING_HEIGHT = 6,
 	SANITYAURA = 10,
 	REMAINS_LOOT_PERCENT = 1,
