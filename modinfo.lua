@@ -4,7 +4,7 @@ end
 
 name = e_or_z("Basements", "地下室")
 author = "OpenSource"
-version = "1.0.13"
+version = "1.0.14"
 
 description =e_or_z(
     [[

@@ -530,13 +530,13 @@ end)
 -- Allow to plant
 local old_CanPlantAtPoint = Map.CanPlantAtPoint
 Map.CanPlantAtPoint = function(self,x,y,z,...)
-    return old_CanPlantAtPoint(self,x,y,z,...) or IsPassableAtPoint(x, y, z)
+    return old_CanPlantAtPoint(self,x,y,z,...) or TheWorld.Map:IsBasementAtPoint(x, y, z)
 end
 
 -- Allow to till soil
 local old_CanTillSoilAtPoint = Map.CanTillSoilAtPoint
 Map.CanTillSoilAtPoint = function(self, x, y, z,ignore_tile_type,...)
-    if IsPassableAtPoint(x,y,z) then
+    if TheWorld.Map:IsBasementAtPoint(x, y, z) then
         return old_CanTillSoilAtPoint(self, x,y,z,true,...)
     else
         return old_CanTillSoilAtPoint(self, x,y,z,ignore_tile_type,...)
