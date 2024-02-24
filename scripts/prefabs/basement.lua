@@ -1637,17 +1637,20 @@ local function AddBasementObjectBenefits(inst, ent)
             if ent.components.growable and ent.components.growable.stages then
                 local stages = deepcopy(ent.components.growable.stages)
                 data.plant_stages = stages
-                -- Keep the plant from dying
-                stages[5].time = function(inst) return 480000 end
-                ent.components.growable.stages = stages
-                -- Force the plant to be oversized
-                ent.force_oversized = true
-                -- Rapid growth
-                if TUNING.BASEMENT.QUICK_GROW then
-                    while ent.components.growable:GetStage() < 5 do
-                        ent.components.growable:DoGrowth()
+                
+                if #stages >= 5 then
+                    -- Keep the plant from dying
+                    stages[5].time = function(inst) return 480000 end
+                    -- Force the plant to be oversized
+                    ent.force_oversized = true
+                    -- Rapid growth
+                    if TUNING.BASEMENT.QUICK_GROW then
+                        while ent.components.growable:GetStage() < 5 do
+                            ent.components.growable:DoGrowth()
+                        end
                     end
                 end
+                ent.components.growable.stages = stages
             end
         end
     end
