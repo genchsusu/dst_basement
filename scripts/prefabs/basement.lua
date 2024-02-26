@@ -2153,7 +2153,7 @@ local function OnLoad(inst, data, newents)
 			inst.state.flooring:set(data.flooring)
 		end
 						
-		if data.basement ~= nil then
+		if data.basement ~= nil and newents ~= nil then
 			local basement = {}
 			for name, GUID in pairs(data.basement) do
 				basement[name] = newents[GUID]
