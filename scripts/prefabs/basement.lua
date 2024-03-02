@@ -1591,6 +1591,17 @@ local function PopBasementWorldStateForEntity(ent, data)
 	end
 end
 
+local function StopGrowthWhenOversized(ent)
+    if ent.components.growable then
+        if ent.components.growable:GetStage() >= 5 then
+            ent.components.growable.targettime = 480000
+            ent:RemoveEventCallback("entitysleep", StopGrowthWhenOversized)
+            return
+        end
+    end
+    ent:DoTaskInTime(5, StopGrowthWhenOversized)
+end
+
 local function AddBasementObjectBenefits(inst, ent)	
 	local data = {}
 	
@@ -1623,34 +1634,44 @@ local function AddBasementObjectBenefits(inst, ent)
 		data.grower = ent.components.grower.growrate
 		ent.components.grower.growrate = 0.5
 	end
+    if ent.components.pickable ~= nil then
+        if ent.components.pickable.max_cycles ~= nil then
+            ent.components.pickable.cycles_left = ent.components.pickable.max_cycles + 1
+        end
+    end
     if ent.prefab ~= nil then
+        -- Remove useless things
+        local items = {
+            "fruitfly", 
+            "hound", "firehound", "icehound", "mutatedhound", "moonhound", "houndcorpse", "clayhound", "warg", "claywarg", "gingerbreadwarg", 
+            "lunarthrall_plant", "lunarthrall_plant_gestalt", "lunarthrall_plant_vine_end"
+        }
+        for _, item in ipairs(items) do
+            if ent.prefab == item then
+                ent:Remove()
+            end
+        end
+        -- For farm_plants
         if string.find(ent.prefab, "farm_plant_") then
             -- Remove Stress
             if ent.components.farmplantstress ~= nil then
-                data.stressors = ent.components.farmplantstress.stressors
-                data.stressors_testfns = ent.components.farmplantstress.stressors_testfns
-                data.stressor_fns = ent.components.farmplantstress.stressor_fns
                 ent.components.farmplantstress.stressors = {}
                 ent.components.farmplantstress.stressors_testfns = {}
                 ent.components.farmplantstress.stressor_fns = {}
             end
-            if ent.components.growable and ent.components.growable.stages then
-                local stages = deepcopy(ent.components.growable.stages)
-                data.plant_stages = stages
-                
-                if #stages >= 5 then
-                    -- Keep the plant from dying
-                    stages[5].time = function(inst) return 480000 end
-                    -- Force the plant to be oversized
-                    ent.force_oversized = true
-                    -- Rapid growth
-                    if TUNING.BASEMENT.QUICK_GROW then
-                        while ent.components.growable:GetStage() < 5 do
-                            ent.components.growable:DoGrowth()
-                        end
+            if ent.components.growable ~= nil then
+                if TUNING.BASEMENT.QUICK_GROW then
+                    if ent.components.growable.magicgrowable and ent.components.growable.domagicgrowthfn ~= nil then
+                        ent.magic_growth_delay = 1
+                        ent.components.growable:DoMagicGrowth()
                     end
                 end
-                ent.components.growable.stages = stages
+                -- Force the plant to be oversized
+                ent.force_oversized = true
+                -- Stop grow when it's oversized
+                if ent.components.growable.stages then
+                    ent:DoTaskInTime(5, StopGrowthWhenOversized)
+                end
             end
         end
     end
@@ -1700,20 +1721,6 @@ local function RemoveBasementObjectBenefits(inst, ent, data)
 	if data.grower ~= nil and ent.components.grower ~= nil then
 		ent.components.grower.growrate = data.grower
 	end
-    if ent.prefab ~= nil then
-        if string.find(ent.prefab, "farm_plant_") then
-            if ent.components.growable and ent.components.growable.stages and data.plant_stages then
-                ent.components.growable.stages = data.plant_stages
-                ent.force_oversized = nil
-            end
-            if ent.components.farmplantstress ~= nil then
-                ent.components.farmplantstress.stressors = data.stressors or {}
-                ent.components.farmplantstress.stressors_testfns = data.stressors_testfns or {}
-                ent.components.farmplantstress.stressor_fns = data.stressor_fns or {}
-            end
-        end
-    end
-
 	if ent.components.dryer ~= nil then
 		ent.components.dryer.protectedfromrain = data.protectedfromrain
 	end
