@@ -1639,12 +1639,16 @@ local function AddBasementObjectBenefits(inst, ent)
             ent.components.pickable.cycles_left = ent.components.pickable.max_cycles + 1
         end
     end
+    if ent.components.witherable ~= nil then
+        ent.components.witherable:Enable(false)
+    end
     if ent.prefab ~= nil then
         -- Remove useless things
         local items = {
             "fruitfly", 
-            "hound", "firehound", "icehound", "mutatedhound", "moonhound", "houndcorpse", "clayhound", "warg", "claywarg", "gingerbreadwarg", 
-            "lunarthrall_plant", "lunarthrall_plant_gestalt", "lunarthrall_plant_vine_end"
+            "hound", "firehound", "icehound", "mutatedhound", "moonhound", "houndcorpse", "clayhound", "warg", "claywarg", "gingerbreadwarg",  -- 狼
+            "lunarthrall_plant", "lunarthrall_plant_gestalt", "lunarthrall_plant_vine_end", -- 亮茄
+            "snowpile", "snowmong", -- 永不妥协
         }
         for _, item in ipairs(items) do
             if ent.prefab == item then
@@ -1660,16 +1664,18 @@ local function AddBasementObjectBenefits(inst, ent)
                 ent.components.farmplantstress.stressor_fns = {}
             end
             if ent.components.growable ~= nil then
-                if TUNING.BASEMENT.QUICK_GROW then
-                    if ent.components.growable.magicgrowable and ent.components.growable.domagicgrowthfn ~= nil then
-                        ent.magic_growth_delay = 1
-                        ent.components.growable:DoMagicGrowth()
-                    end
-                end
                 -- Force the plant to be oversized
                 ent.force_oversized = true
-                -- Stop grow when it's oversized
+                
                 if ent.components.growable.stages then
+                    -- Rapid growth
+                    if TUNING.BASEMENT.QUICK_GROW then
+                        if ent.components.growable.magicgrowable and ent.components.growable.domagicgrowthfn ~= nil and ent.components.growable:GetStage() < 5 then
+                            ent.magic_growth_delay = 1
+                            ent.components.growable:DoMagicGrowth()
+                        end
+                    end
+                    -- Stop grow when it's oversized
                     ent:DoTaskInTime(5, StopGrowthWhenOversized)
                 end
             end

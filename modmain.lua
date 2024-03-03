@@ -22,7 +22,6 @@ modimport("main/basement")
 modimport("main/tech")
 -- modules
 modimport("main/modules/farm_plant")
-modimport("main/modules/no_witherable")
 
 -- Compatibility
 -- For uncompromising

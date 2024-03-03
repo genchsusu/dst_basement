@@ -61,18 +61,3 @@ AddClassPostConstruct("widgets/um_stormover", function(self)
         end
     end
 end)
-
--- Remove items from basement
-local items = {"snowpile", "snowmong"}
-
-for _, v in ipairs(items) do --
-    AddPrefabPostInit(v, function(inst)
-        if TheWorld.ismastersim then
-            inst:DoPeriodicTask(1, function(inst)
-                if inst:IsInBasement() then
-                    inst:Remove()
-                end
-            end)
-        end
-    end)
-end
