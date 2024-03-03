@@ -1602,6 +1602,14 @@ local function StopGrowthWhenOversized(ent)
     ent:DoTaskInTime(5, StopGrowthWhenOversized)
 end
 
+local function DoEffect(ent)
+    local x, y, z = ent.Transform:GetWorldPosition()
+    local shadowpuff = SpawnPrefab("shadow_puff_large_front")
+    shadowpuff.Transform:SetPosition(x, 0, z)
+    shadowpuff.Transform:SetScale(0.7, 0.7, 0.7)            
+    SpawnPrefab("shadow_despawn").Transform:SetPosition(x, 0, z)
+end
+
 local function AddBasementObjectBenefits(inst, ent)	
 	local data = {}
 	
@@ -1634,13 +1642,20 @@ local function AddBasementObjectBenefits(inst, ent)
 		data.grower = ent.components.grower.growrate
 		ent.components.grower.growrate = 0.5
 	end
-    if ent.components.pickable ~= nil then
-        if ent.components.pickable.max_cycles ~= nil then
-            ent.components.pickable.cycles_left = ent.components.pickable.max_cycles + 1
-        end
-    end
     if ent.components.witherable ~= nil then
         ent.components.witherable:Enable(false)
+    end
+    -- Fertilize
+    local poop = c_spawn("poop")
+    if ent and ent.components.crop and not ent.components.crop:IsReadyForHarvest() and not ent:HasTag("withered") then
+        ent.components.crop:Fertilize(poop)
+    elseif ent.components.grower and ent.components.grower:IsEmpty() then
+        ent.components.grower:Fertilize(poop)
+    elseif ent.components.pickable and ent.components.pickable:CanBeFertilized() then
+        ent.components.pickable:Fertilize(poop)
+    end
+    if poop ~= nil then
+        poop:Remove()
     end
     if ent.prefab ~= nil then
         -- Remove useless things
@@ -1673,6 +1688,7 @@ local function AddBasementObjectBenefits(inst, ent)
                         if ent.components.growable.magicgrowable and ent.components.growable.domagicgrowthfn ~= nil and ent.components.growable:GetStage() < 5 then
                             ent.magic_growth_delay = 1
                             ent.components.growable:DoMagicGrowth()
+                            DoEffect(ent)
                         end
                     end
                     -- Stop grow when it's oversized
