@@ -1645,6 +1645,21 @@ local function AddBasementObjectBenefits(inst, ent)
     if ent.components.witherable ~= nil then
         ent.components.witherable:Enable(false)
     end
+    -- Reduce the grow time
+    if ent.components.pickable ~= nil then
+        ent.components.pickable.quickpick = true
+        if ent.components.pickable.getregentimefn ~= nil then
+            ent.components.pickable.getregentimefn = nil
+        end
+        if TUNING.BASEMENT.QUICK_GROW then
+            ent.components.pickable:FinishGrowing()
+            ent.components.pickable.baseregentime = 30 * 4
+            ent.components.pickable.regentime = 30 * 4
+        end
+        if ent.components.pickable.numtoharvest == 1 then
+            ent.components.pickable.numtoharvest = 10
+        end
+    end
     -- Fertilize
     local poop = c_spawn("poop")
     if ent and ent.components.crop and not ent.components.crop:IsReadyForHarvest() and not ent:HasTag("withered") then
