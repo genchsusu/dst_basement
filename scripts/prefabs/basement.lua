@@ -1634,9 +1634,6 @@ local function AddBasementObjectBenefits(inst, ent)
 		data.grower = ent.components.grower.growrate
 		ent.components.grower.growrate = 0.5
 	end
-    if ent.components.witherable ~= nil then
-        ent.components.witherable:Enable(false)
-    end
     -- Reduce the grow time
     if ent.components.pickable ~= nil then
         ent.components.pickable.quickpick = true
