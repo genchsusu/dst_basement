@@ -1914,7 +1914,7 @@ local function AddBasementPlayerBenefits(inst, ent)
 	ent.basement_lightningrod = ent:SpawnChild("basement_debug_lightningrod")
 	
 	if ent.components.sanity ~= nil then
-		ent.components.sanity.externalmodifiers:SetModifier(inst, TUNING.BASEMENT.SANITYAURA / 60)
+		ent.components.sanity.externalmodifiers:SetModifier(inst, TUNING.BASEMENT.SANITYAURA)
 	end
 	if ent.components.temperature ~= nil then
 		ent.components.temperature:SetModifier("basement", inst.insulation)
