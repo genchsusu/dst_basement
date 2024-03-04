@@ -1928,6 +1928,9 @@ local function AddBasementPlayerBenefits(inst, ent)
 	if ent.components.wereness ~= nil then		
 		Waffles.Replace(ent.components.wereness, "SetPercent", WerenessSetPercent)
 	end
+    if ent.components.grue ~= nil then
+        ent.components.grue:AddImmunity("basement")
+    end
 	if ent.components.builder ~= nil then
 		SetBasementTab(inst, ent, CanShowBasementTab(ent, ent.components.builder.accessible_tech_trees))
 		ent:ListenForEvent("techtreechange", OnTechTreeChange)
@@ -1978,6 +1981,9 @@ local function RemoveBasementPlayerBenefits(inst, ent)
 			fn(ent, TheWorld.state.isfullmoon)
 		end
 	end
+    if ent.components.grue ~= nil then
+        ent.components.grue:RemoveImmunity("basement")
+    end
 	if ent.components.builder ~= nil then
 		SetBasementTab(inst, ent, false)
 		ent:RemoveEventCallback("techtreechange", OnTechTreeChange)
@@ -2374,7 +2380,7 @@ local function tile_common(build, anim, scale, layer)
     inst.Light:Enable(true)
     inst.Light:SetRadius(50)
     inst.Light:SetFalloff(0.5)
-    inst.Light:SetIntensity(0.3)
+    inst.Light:SetIntensity(0.5)
     inst.Light:SetColour(223/255, 208/255, 69/255)
 
 	inst.AnimState:SetBank(build)

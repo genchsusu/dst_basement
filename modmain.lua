@@ -17,7 +17,6 @@ table.insert(Assets, Asset("ATLAS", "images/inventoryimages/basement.xml"))
 AddMinimapAtlas("images/inventoryimages/basement.xml")
 
 
-
 modimport("main/basement")
 modimport("main/tech")
 -- modules
