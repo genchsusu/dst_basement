@@ -208,7 +208,6 @@ local function wall()
 	inst.entity:AddTransform()
 	inst.entity:AddAnimState()
 	inst.entity:AddNetwork()
-    inst.entity:AddLight()
 	
 	inst.Transform:SetEightFaced()
 	
@@ -239,13 +238,6 @@ local function wall()
 	
 	inst:SetPrefabNameOverride("wall_stone")
 
-    inst.Light:Enable(true)
-    inst.Light:SetRadius(50)
-    inst.Light:SetFalloff(0.5)
-    -- inst.Light:SetIntensity(0.8)
-    inst.Light:SetIntensity(0.3)
-    inst.Light:SetColour(223/255, 208/255, 69/255)
-	
 	inst:AddComponent("workable")
 	inst.components.workable:SetWorkAction(ACTIONS.MINE)
 	inst.components.workable:SetWorkLeft(TUNING.CAVEIN_BOULDER_MINE * 1.5)
@@ -2377,7 +2369,14 @@ local function tile_common(build, anim, scale, layer)
 	
 	inst.entity:AddTransform()
 	inst.entity:AddAnimState()
-	
+
+    inst.entity:AddLight()
+    inst.Light:Enable(true)
+    inst.Light:SetRadius(50)
+    inst.Light:SetFalloff(0.5)
+    inst.Light:SetIntensity(0.3)
+    inst.Light:SetColour(223/255, 208/255, 69/255)
+
 	inst.AnimState:SetBank(build)
 	inst.AnimState:SetBuild(build)
 	inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)

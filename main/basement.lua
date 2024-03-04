@@ -2,7 +2,6 @@
 --[[ Basement Map ]]
 --------------------------------------------------------------------------
 local BASEMENT_TILES = {}
-local NU_BASEMENT_TILES = {}
 
 local function GetInteriorTileCenterPoint(x, y, z)
 	if z ~= nil then
@@ -16,14 +15,6 @@ local function GetInteriorTileKey(...)
 end
 
 Waffles.GetInteriorTileKey = GetInteriorTileKey
-
--- Get the flat coordinates of the point
-local function GetInteriorTileKeyFloor(x,y,z)
-    x,z = TheWorld.Map:GetTileCoordsAtPoint(x,y,z)
-	return x.."_"..z
-end
-
-Waffles.GetInteriorTileKeyFloor = GetInteriorTileKeyFloor
 
 local function IsBasementAtPoint(map, x, y, z)
 	return BASEMENT_TILES[GetInteriorTileKey(x, y, z)] ~= nil
@@ -68,13 +59,11 @@ Waffles.Sequence(Map, "GetTileCenterPoint", GetTileCenterPoint, true)
 function Waffles.AddSyntTile(x, y, z, source)
 	if TheWorld.Map:GetTileAtPoint(x, y, z) == GROUND.INVALID then
 		BASEMENT_TILES[GetInteriorTileKey(x, y, z)] = source or true
-        NU_BASEMENT_TILES[GetInteriorTileKeyFloor(x, y, z)] = source or true
 	end
 end
 
 function Waffles.RemoveSyntTile(...)
 	BASEMENT_TILES[GetInteriorTileKey(...)] = nil
-    NU_BASEMENT_TILES[GetInteriorTileKeyFloor(...)] = nil
 end
 
 if not TheNet:GetIsServer() then
@@ -550,7 +539,8 @@ AddComponentPostInit("farming_manager", function(self, inst)
 	end
 	local old_GetTileNutrients=self.GetTileNutrients
     self.GetTileNutrients=function(self,x,y,...)
-        if NU_BASEMENT_TILES[tostring(x).."_"..tostring(y)] then
+        local tileInfo = GetTileInfo(TheWorld.Map:GetTile(x, y))
+        if tileInfo == nil then
             return 100,100,100
         end
         return old_GetTileNutrients(self,x,y,...)
