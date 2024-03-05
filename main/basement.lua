@@ -119,6 +119,7 @@ TUNING.BASEMENT =
     LIMIT = GetModConfigData("basement_limit"),
     PERISH = GetModConfigData("basement_no_perish"),
     QUICK_GROW = GetModConfigData('enable_quick_grow'),
+    PLANT_HARVEST = GetModConfigData('enable_plant_harvest'),
 	CEILING_HEIGHT = 6,
 	SANITYAURA = 10,
 	REMAINS_LOOT_PERCENT = 1,
@@ -421,8 +422,8 @@ local BASEMENT_WORLD_STATE =
 		pop	= 0,
 		snowlevel = 0,
 		
-		phase =	"night",
-		cavephase =	"night",
+		phase =	"day",
+		cavephase =	"day",
 		moonphase = "new",
 		
 		season = "autumn",
@@ -437,12 +438,12 @@ local BASEMENT_WORLD_STATE =
 		israining = false,
 		iswet = false,
 		
-		isday = false,
+		isday = true,
 		isdusk = false,
-		isnight = true,
-		iscaveday = false,
+		isnight = false,
+		iscaveday = true,
 		iscavedusk = false,	
-		iscavenight	= true,
+		iscavenight	= false,
 	},
 	
 	STACK = 0,

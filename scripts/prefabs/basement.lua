@@ -443,9 +443,10 @@ local function entrance()
     
     inst.Light:Enable(true)
     inst.Light:SetRadius(2)
-    inst.Light:SetFalloff(0.5)
+    inst.Light:SetFalloff(0.8)
     inst.Light:SetIntensity(0.8)
     inst.Light:SetColour(223/255, 208/255, 69/255)
+    inst.Light:EnableClientModulation(true)
 
 	inst.Transform:SetTwoFaced()
 	
@@ -849,46 +850,16 @@ local function ReceiveItem(teleporter, item)
 	end
 end
 
-local function LightToggle(light, value)
-	light.level = (light.level or 0) + value
-	if (value > 0 and light.level <= 1) or (value < 0 and light.level > 0) then
-		light.Light:SetRadius(light.level)
-		light.lighttoggle = light:DoTaskInTime(2 * FRAMES, LightToggle, value)
-	elseif value < 0 then
-		light.Light:Enable(false)
-		light:Hide()
-	end
-	light.AnimState:SetScale(light.level, 1)
-end
-
-local function TakeLightSteps(light, value)
-	if light.lighttoggle ~= nil then
-		light.lighttoggle:Cancel()
-	end
-	light.lighttoggle = light:DoTaskInTime(2 * FRAMES, LightToggle, value)
-end
-
 local function OnNearExit(inst, player)
-	if not inst.hatchlight.Light:IsEnabled() then
-		inst.hatchlight.Light:Enable(true)
-		inst.hatchlight:Show()
-	
-		TakeLightSteps(inst.hatchlight, 0.2)
-		
-		if not inst:IsAsleep() then
-			inst.SoundEmitter:PlaySound("hatch/common/hatch/open_muffled")
-		end
-	end
+    if not inst:IsAsleep() then
+        inst.SoundEmitter:PlaySound("hatch/common/hatch/open_muffled")
+    end
 end
 
-local function OnFarExit(inst, player)		
-	if inst.hatchlight.Light:IsEnabled() then
-		TakeLightSteps(inst.hatchlight, -0.2)
-		
-		if not inst:IsAsleep() then
-			inst.SoundEmitter:PlaySound("hatch/common/hatch/close_muffled")
-		end
-	end
+local function OnFarExit(inst, player)
+    if not inst:IsAsleep() then
+        inst.SoundEmitter:PlaySound("hatch/common/hatch/close_muffled")
+    end
 end
 
 local function exit()
@@ -897,7 +868,15 @@ local function exit()
 	inst.entity:AddTransform()
 	inst.entity:AddAnimState()
 	inst.entity:AddSoundEmitter()
+    inst.entity:AddLight()
 	inst.entity:AddNetwork()
+
+    inst.Light:Enable(true)
+    inst.Light:SetRadius(500)
+    inst.Light:SetFalloff(0.8)
+    inst.Light:SetIntensity(0.8)
+    inst.Light:SetColour(223/255, 208/255, 69/255)
+    inst.Light:EnableClientModulation(true)
 	
 	inst.Transform:SetTwoFaced()
 	inst.Transform:SetRotation(-45)
@@ -923,10 +902,6 @@ local function exit()
 	
 	inst.Physics:SetCollisionCallback(OnTeleportedEntity)
 	
-	inst.hatchlight = inst:SpawnChild("basement_exit_light")
-	inst.hatchlight.Light:Enable(false)
-	inst.hatchlight:Hide()
-	
 	inst:AddComponent("inspectable")
 		
 	inst:AddComponent("teleporter")
@@ -945,62 +920,6 @@ local function exit()
 
     inst:AddComponent("prototyper")
 	inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.BASEMENT_TECH
-
-	return inst
-end
-
-local HATCH_LIGHT_COLOURS =
-{
-	day =	{ light = { 0.7, 0.75, 0.67 }, anim = { 0.35, 0.38, 0.33, 0 }, time = 4 },
-	dusk =	{ light = { 0.7, 0.75, 0.67 }, anim = { 0.35, 0.38, 0.33, 0 }, time = 6 },
-	night = { light = { 0, 0, 0 },		   anim = { 0, 0, 0, 0 },		   time = 8 },
-}
-
-local function UpdateHatchLight(inst, phase)	
-	local data = HATCH_LIGHT_COLOURS[phase]
-	if data ~= nil then
-		inst.Light:SetColour(unpack(data.light))
-		inst.AnimState:SetMultColour(unpack(data.anim))
-	end
-end
-
-local function exit_light()
-	local inst = CreateEntity()
-
-	inst.entity:AddTransform()
-	inst.entity:AddAnimState()
-	inst.entity:AddLight()
-	inst.entity:AddNetwork()
-	
-	inst.Light:SetRadius(1)
-	inst.Light:SetIntensity(0.85)
-	inst.Light:SetFalloff(0.3)
-	inst.Light:SetColour(0.7, 0.75, 0.67)
-	--inst.Light:EnableClientModulation(true)
-
-	inst.AnimState:SetBank("cavelight")
-	inst.AnimState:SetBuild("cave_exit_lightsource")
-	inst.AnimState:PlayAnimation("idle_loop", true)
-	inst.AnimState:SetMultColour(0.35, 0.38, 0.33, 0)
-	inst.AnimState:SetLightOverride(1)
-	
-	inst.Transform:SetScale(1.5, 0.4, 1)
-
-	inst:AddTag("NOCLICK")
-	inst:AddTag("FX")
-	inst:AddTag("daylight")
-	inst:AddTag("basement_part")
-	
-	inst.entity:SetPristine()
-
-	if not TheWorld.ismastersim then
-		return inst
-	end
-	
-	inst:WatchWorldState("phase", UpdateHatchLight)
-	UpdateHatchLight(inst, TheWorld.state.phase)
-	
-	inst.persists = false
 
 	return inst
 end
@@ -1645,8 +1564,10 @@ local function AddBasementObjectBenefits(inst, ent)
             ent.components.pickable.baseregentime = 30 * 4
             ent.components.pickable.regentime = 30 * 4
         end
-        if ent.components.pickable.numtoharvest == 1 then
-            ent.components.pickable.numtoharvest = 10
+        if TUNING.BASEMENT.PLANT_HARVEST then
+            if ent.components.pickable.numtoharvest == 1 then
+                ent.components.pickable.numtoharvest = 10
+            end
         end
     end
     -- Fertilize
@@ -1909,12 +1830,12 @@ end
 
 local function AddBasementPlayerBenefits(inst, ent)
 	ForceUpdateState(inst)
-			
+
 	ent.basement = inst.basement
 	ent.basement_lightningrod = ent:SpawnChild("basement_debug_lightningrod")
 	
 	if ent.components.sanity ~= nil then
-		ent.components.sanity.externalmodifiers:SetModifier(inst, TUNING.BASEMENT.SANITYAURA)
+		ent.components.sanity.externalmodifiers:SetModifier(inst, TUNING.BASEMENT.SANITYAURA / 10)
 	end
 	if ent.components.temperature ~= nil then
 		ent.components.temperature:SetModifier("basement", inst.insulation)
@@ -2376,9 +2297,10 @@ local function tile_common(build, anim, scale, layer)
     inst.entity:AddLight()
     inst.Light:Enable(true)
     inst.Light:SetRadius(50)
-    inst.Light:SetFalloff(0.5)
-    inst.Light:SetIntensity(0.5)
+    inst.Light:SetFalloff(0.8)
+    inst.Light:SetIntensity(0.8)
     inst.Light:SetColour(223/255, 208/255, 69/255)
+    inst.Light:EnableClientModulation(true)
 
 	inst.AnimState:SetBank(build)
 	inst.AnimState:SetBuild(build)
@@ -2485,7 +2407,6 @@ return Prefab("wall_basement", wall),
 	Prefab("basement_entrance_builder", builder),
 	MakePlacer("basement_entrance_placer", "basement_entrance", "basement_hatch", "idle", nil, nil, nil, nil, nil, nil, placerdecor),
 	Prefab("basement_exit", exit, assets.stairs),
-	Prefab("basement_exit_light", exit_light),
 	Prefab("basement", base),
 	Prefab("basement_tile", tile, assets.tile),
 	Prefab("basement_voidtile", tile_void, assets.voidtile),

@@ -4,7 +4,7 @@ end
 
 name = e_or_z("Basements", "地下室")
 author = "OpenSource"
-version = "1.2.2"
+version = "1.2.3"
 
 description =e_or_z(
     [[
@@ -107,8 +107,9 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 
     header(e_or_z("Plants", "种植类")),
 
-    AddConfig(e_or_z("All Seasons Farm Plant", "全季节种植"), "enable_all_seasons_growth", e_or_z("Enable all seasons growth and quick grow for farm plants.", "启用农场植物的全季节生长。"), nil, true),
-    AddConfig(e_or_z("Rapid growth", "快速生长"), "enable_quick_grow", e_or_z("Enable quick grow for farm plants.", "启用农场植物的快速生长。"), nil, true),
+    AddConfig(e_or_z("All Seasons Farm Plant", "全季节种植"), "enable_all_seasons_growth", e_or_z("Enable all seasons growth.", "启用全季节生长。"), nil, true),
+    AddConfig(e_or_z("Rapid growth", "快速生长"), "enable_quick_grow", e_or_z("Enable quick grow.", "启用快速生长。"), nil, true),
+    AddConfig(e_or_z("10x Harvest", "10倍收获"), "enable_plant_harvest", e_or_z("Enable 10x harvest.", "启用10倍收获。"), nil, true),
     {	
 		name = "farm_soil_grid",
 		label = e_or_z("farm_plow_item", "耕地机相关"),
