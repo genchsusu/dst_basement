@@ -20,8 +20,10 @@ AddMinimapAtlas("images/inventoryimages/basement.xml")
 modimport("main/basement")
 modimport("main/tech")
 -- modules
-modimport("main/modules/farm_plant")
 modimport("main/modules/no_witherable")
+
+-- Remove defender
+TUNING.FARM_PLANT_DEFENDER_SEARCH_DIST = 0
 
 -- Compatibility
 -- For uncompromising

@@ -4,7 +4,7 @@ end
 
 name = e_or_z("Basements", "地下室")
 author = "OpenSource"
-version = "1.2.3"
+version = "1.2.4"
 
 description =e_or_z(
     [[
@@ -79,10 +79,10 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 		hover = e_or_z("Ingredients required for building a basement.", "建造地下室所需的材料。"),
 		options =
 		{
-			{ description = "Free", data = [[return {Ingredient(CHARACTER_INGREDIENT.SANITY, 5)}]], hover = "󰀓 -5" },
-			{ description = "Easy", data = [[return {Ingredient("goldnugget", 5), Ingredient("cutstone", 10), Ingredient("gunpowder", 5)}]], hover = basement_recipe(5, 10 ,5)},
-			{ description = "Intermediate", data = [[return {Ingredient("goldnugget", 10), Ingredient("cutstone", 30), Ingredient("gunpowder", 10)}]], hover = basement_recipe(10, 30, 10)},
-			{ description = "Hard", data = [[return {Ingredient("goldnugget", 15), Ingredient("cutstone", 60), Ingredient("gunpowder", 20)}]], hover = basement_recipe(15, 60, 20)}
+			{ description = e_or_z("Free", "免费"), data = [[return {Ingredient(CHARACTER_INGREDIENT.SANITY, 5)}]], hover = "󰀓 -5" },
+			{ description = e_or_z("Easy", "简单"), data = [[return {Ingredient("goldnugget", 5), Ingredient("cutstone", 10), Ingredient("gunpowder", 5)}]], hover = basement_recipe(5, 10 ,5)},
+			{ description = e_or_z("Medium", "普通"), data = [[return {Ingredient("goldnugget", 10), Ingredient("cutstone", 30), Ingredient("gunpowder", 10)}]], hover = basement_recipe(10, 30, 10)},
+			{ description = e_or_z("Hard", "困难"), data = [[return {Ingredient("goldnugget", 15), Ingredient("cutstone", 60), Ingredient("gunpowder", 20)}]], hover = basement_recipe(15, 60, 20)}
 		},
 		default = [[return {Ingredient("goldnugget", 5), Ingredient("cutstone", 10), Ingredient("gunpowder", 5)}]],
 	},
@@ -107,13 +107,25 @@ English, Chinese, Polish, Portuguese, Russian and Spanish.]],
 
     header(e_or_z("Plants", "种植类")),
 
-    AddConfig(e_or_z("All Seasons Farm Plant", "全季节种植"), "enable_all_seasons_growth", e_or_z("Enable all seasons growth.", "启用全季节生长。"), nil, true),
-    AddConfig(e_or_z("Rapid growth", "快速生长"), "enable_quick_grow", e_or_z("Enable quick grow.", "启用快速生长。"), nil, true),
-    AddConfig(e_or_z("10x Harvest", "10倍收获"), "enable_plant_harvest", e_or_z("Enable 10x harvest.", "启用10倍收获。"), nil, true),
+    AddConfig(e_or_z("All Seasons Farm Plant", "全季节种植"), "all_seasons_growth", e_or_z("Enable all seasons growth.", "启用全季节生长。"), nil, true),
+    AddConfig(e_or_z("Rapid growth", "快速生长"), "rapid_growth", e_or_z("Enable quick grow.", "启用快速生长。"), nil, true),
+    {	
+		name = "multiple_harvest",
+		label = e_or_z("multiple harvest", "多倍收获"),
+		hover = e_or_z("Enable multiple harvests.", "启用多倍收获。"),
+		options =
+		{
+            { description = e_or_z("Off", "禁用"), data = false},
+            { description = e_or_z("x3", "3倍"), data = 3 },
+            { description = e_or_z("x5", "5倍"), data = 5 },
+            { description = e_or_z("x10", "10倍"), data = 10 },
+		},
+		default = false,
+	},
     {	
 		name = "farm_soil_grid",
 		label = e_or_z("farm_plow_item", "耕地机相关"),
-		hover = e_or_z("Get a [number] x [number] grid if using farm_plow in basement", "在地下室使用耕地机将获得一个 [number] x [number] 的矩阵"),
+		hover = e_or_z("Get a 3x3/4x4/5x5 grid if using in basement", "在地下室使用将获得一个3x3/4x4/5x5的矩阵 "),
 		options =
 		{
             { description = e_or_z("Off", "关闭"), data = false},

@@ -118,8 +118,9 @@ TUNING.BASEMENT =
 {
     LIMIT = GetModConfigData("basement_limit"),
     PERISH = GetModConfigData("basement_no_perish"),
-    QUICK_GROW = GetModConfigData('enable_quick_grow'),
-    PLANT_HARVEST = GetModConfigData('enable_plant_harvest'),
+    RAPID_GROWTH = GetModConfigData('rapid_growth'),
+    MULTIPLE_HARVEST = GetModConfigData('multiple_harvest'),
+    ALL_SEASONS_GROWTH = GetModConfigData('all_seasons_growth'),
 	CEILING_HEIGHT = 6,
 	SANITYAURA = 10,
 	REMAINS_LOOT_PERCENT = 1,

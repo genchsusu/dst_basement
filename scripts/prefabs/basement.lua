@@ -1513,6 +1513,24 @@ local function StopGrowthWhenOversized(ent)
     ent:DoTaskInTime(5, StopGrowthWhenOversized)
 end
 
+local function StopItemPerishing(item)
+    if item and item.components.perishable ~= nil then
+        item.components.perishable:StopPerishing()
+    end
+end
+
+local function StartItemPerishing(item)
+    if item and item.components.perishable ~= nil then
+        item.components.perishable:StartPerishing()
+    end
+end
+
+local function OnNewItemReceived(container, data)
+    if data and data.item then
+        StopItemPerishing(data.item)
+    end
+end
+
 local function DoEffect(ent)
     local x, y, z = ent.Transform:GetWorldPosition()
     local shadowpuff = SpawnPrefab("shadow_puff_large_front")
@@ -1534,11 +1552,9 @@ local function AddBasementObjectBenefits(inst, ent)
 		ent:AddTag("nocool")
 	end
 
+    -- 地面物体不腐烂
     if TUNING.BASEMENT.PERISH then
-        if ent.components.perishable ~= nil then
-            ent.components.perishable:SetPerishTime(1200000)
-            ent.components.perishable:StopPerishing()
-        end
+        StopItemPerishing(ent)
     end
 	if ent.components.sleepingbag ~= nil and ent:HasTag("tent") then
 		data.tent = ent:HasTag("siestahut")
@@ -1559,14 +1575,14 @@ local function AddBasementObjectBenefits(inst, ent)
         if ent.components.pickable.getregentimefn ~= nil then
             ent.components.pickable.getregentimefn = nil
         end
-        if TUNING.BASEMENT.QUICK_GROW then
+        if TUNING.BASEMENT.RAPID_GROWTH then
             ent.components.pickable:FinishGrowing()
             ent.components.pickable.baseregentime = 30 * 4
             ent.components.pickable.regentime = 30 * 4
         end
-        if TUNING.BASEMENT.PLANT_HARVEST then
+        if TUNING.BASEMENT.MULTIPLE_HARVEST then
             if ent.components.pickable.numtoharvest == 1 then
-                ent.components.pickable.numtoharvest = 10
+                ent.components.pickable.numtoharvest = TUNING.BASEMENT.MULTIPLE_HARVEST
             end
         end
     end
@@ -1608,8 +1624,15 @@ local function AddBasementObjectBenefits(inst, ent)
                 ent.force_oversized = true
                 
                 if ent.components.growable.stages then
+                    -- All Seasons Farm Plant
+                    if TUNING.BASEMENT.ALL_SEASONS_GROWTH then
+                        if ent.plant_def and ent.plant_def.good_seasons then
+                            ent.plant_def.good_seasons = {autumn = true, winter = true, spring = true, summer = true}
+                        end
+                    end
+                    
                     -- Rapid growth
-                    if TUNING.BASEMENT.QUICK_GROW then
+                    if TUNING.BASEMENT.RAPID_GROWTH then
                         if ent.components.growable.magicgrowable and ent.components.growable.domagicgrowthfn ~= nil and ent.components.growable:GetStage() < 5 then
                             ent.magic_growth_delay = 1
                             ent.components.growable:DoMagicGrowth()
@@ -1655,9 +1678,7 @@ local function RemoveBasementObjectBenefits(inst, ent, data)
 		ent:RemoveTag("fridge")
 		ent:RemoveTag("nocool")
 	end
-    if ent.components.perishable ~= nil then
-        ent.components.perishable:StartPerishing()
-    end
+    StartItemPerishing(ent)
 	if data.tent ~= nil then
 		ent:StopWatchingWorldState("phase", AdjustTentTag)
 		AdjustTentTag(ent, data.tent and "day" or "night")
@@ -1856,6 +1877,20 @@ local function AddBasementPlayerBenefits(inst, ent)
     if ent.components.playercontroller ~= nil then
         ent.components.playercontroller:EnableMapControls(false)
     end
+    if TUNING.BASEMENT.PERISH then
+        for _, v in pairs(ent.components.inventory.itemslots) do
+            StopItemPerishing(v)
+        end
+        
+        local backpack = ent.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+        if backpack and backpack.components.container then
+            for _, v in pairs(backpack.components.container.slots) do
+                StopItemPerishing(v)
+            end
+            backpack:ListenForEvent("itemget", OnNewItemReceived)
+        end
+        ent:ListenForEvent("itemget", OnNewItemReceived)
+    end
 	
 	EnableAreaAwareComponent(ent, true)
 	
@@ -1912,6 +1947,19 @@ local function RemoveBasementPlayerBenefits(inst, ent)
     if ent.components.playercontroller ~= nil then
         ent.components.playercontroller:EnableMapControls(true)
     end
+
+    for _, v in pairs(ent.components.inventory.itemslots) do
+        StartItemPerishing(v)
+    end
+    
+    local backpack = ent.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+    if backpack and backpack.components.container then
+        for _, v in pairs(backpack.components.container.slots) do
+            StartItemPerishing(v)
+        end
+        backpack:RemoveEventCallback("itemget", OnNewItemReceived)
+    end
+    ent:RemoveEventCallback("itemget", OnNewItemReceived)
 	
 	EnableAreaAwareComponent(ent, false)	
 	
