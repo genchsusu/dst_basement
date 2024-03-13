@@ -121,9 +121,9 @@ TUNING.BASEMENT =
     RAPID_GROWTH = GetModConfigData('rapid_growth'),
     MULTIPLE_HARVEST = GetModConfigData('multiple_harvest'),
     ALL_SEASONS_GROWTH = GetModConfigData('all_seasons_growth'),
-	CEILING_HEIGHT = 6,
 	SANITYAURA = 10,
 	REMAINS_LOOT_PERCENT = 1,
+    CEILING_HEIGHT = 6,
 	SHADE = 0.5,
 }
 

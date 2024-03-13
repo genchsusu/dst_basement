@@ -1201,37 +1201,7 @@ local function RebuildBasementClient(inst)
 	OnFloorType(inst)
 end
 
-local ShelteredEnts = {}
-setmetatable(ShelteredEnts, { __mode = "k" })
-
-local function OverrideShade(ent)
-	if ent.AnimState ~= nil then
-		local shade = TUNING.BASEMENT.SHADE
-		local pos = ent:GetPosition()
-		if ent.Light ~= nil and ent.Light:IsEnabled() then
-			shade = shade + 0.25
-		end
-		shade = math.min(shade, Remap(pos.y, TUNING.BASEMENT.CEILING_HEIGHT * 0.5, TUNING.BASEMENT.CEILING_HEIGHT * 0.7, shade, 0))
-		ent.AnimState:OverrideShade(shade)
-		return true
-	end
-end
-
 local function PushBasementShades(inst)	
-	local x, y, z = inst.Transform:GetWorldPosition()
-	for i, v in ipairs(TheSim:FindEntities(x, y, z, 70, nil, { "basement_part" })) do
-		if not ShelteredEnts[v] then
-			if BLOCKED.EFFECTS[v.prefab] then
-				ShelteredEnts[v] = v.entity:GetParent()
-				v.entity:SetParent(nil)
-			elseif OverrideShade(v) then
-				ShelteredEnts[v] = true
-			end
-		else
-			OverrideShade(v)
-		end
-	end
-	
 	if not TheWorld.ismastersim and TheWorld.state.iswet then
 		TheWorld.state.iswet = false
 	end
@@ -1242,22 +1212,6 @@ local function PushBasementShades(inst)
 		
 		ThePlayer.components.locomotor:PushTempGroundSpeedMultiplier(1, inst.foleyground)
 	end
-end
-
-local function PopBasementShades(inst)	
-	for k, v in pairs(ShelteredEnts) do
-		if k:IsValid() then
-			if BLOCKED.EFFECTS[k.prefab] then
-				k.entity:SetParent(v.entity)
-			end
-			if k.AnimState ~= nil then
-				k.AnimState:OverrideShade(1)
-			end
-		end
-	end
-
-	ShelteredEnts = {}
-	setmetatable(ShelteredEnts, { __mode = "k" })
 end
 
 local function DisableShaderTest(basement)
@@ -1273,8 +1227,6 @@ local function BasementShader(basement)
 		PushBasementShades(basement)
 		Yield()
 	until DisableShaderTest(basement)
-
-	PopBasementShades(basement)
 end
 
 local function EnableAreaAwareComponent(ent, enable)
