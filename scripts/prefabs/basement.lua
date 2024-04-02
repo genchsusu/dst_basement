@@ -1199,7 +1199,20 @@ local function RebuildBasementClient(inst)
 	OnFloorType(inst)
 end
 
+local ShelteredEnts = {}
+setmetatable(ShelteredEnts, { __mode = "k" })
+
 local function PushBasementShades(inst)	
+    local x, y, z = inst.Transform:GetWorldPosition()
+	for i, v in ipairs(TheSim:FindEntities(x, y, z, 70, nil, { "basement_part" })) do
+		if not ShelteredEnts[v] then
+			if BLOCKED.EFFECTS[v.prefab] then
+				ShelteredEnts[v] = v.entity:GetParent()
+				v.entity:SetParent(nil)
+			end
+		end
+	end
+
 	if not TheWorld.ismastersim and TheWorld.state.iswet then
 		TheWorld.state.iswet = false
 	end
@@ -1210,6 +1223,19 @@ local function PushBasementShades(inst)
 		
 		ThePlayer.components.locomotor:PushTempGroundSpeedMultiplier(1, inst.foleyground)
 	end
+end
+
+local function PopBasementShades(inst)	
+	for k, v in pairs(ShelteredEnts) do
+		if k:IsValid() then
+			if BLOCKED.EFFECTS[k.prefab] then
+				k.entity:SetParent(v.entity)
+			end
+		end
+	end
+
+	ShelteredEnts = {}
+	setmetatable(ShelteredEnts, { __mode = "k" })
 end
 
 local function DisableShaderTest(basement)
@@ -1225,6 +1251,8 @@ local function BasementShader(basement)
 		PushBasementShades(basement)
 		Yield()
 	until DisableShaderTest(basement)
+
+    PopBasementShades(basement)
 end
 
 local function EnableAreaAwareComponent(ent, enable)
